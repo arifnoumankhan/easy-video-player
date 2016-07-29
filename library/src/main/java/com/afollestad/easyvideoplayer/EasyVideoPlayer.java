@@ -69,6 +69,8 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
     public static final int RIGHT_ACTION_CUSTOM_LABEL = 5;
     private static final int UPDATE_INTERVAL = 100;
 
+    public static boolean DEBUG = true;
+
     public EasyVideoPlayer(Context context) {
         super(context);
         init(context, null);
@@ -363,10 +365,12 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
             mPlayer.setSurface(mSurface);
             if (mSource.getScheme() != null &&
                     (mSource.getScheme().equals("http") || mSource.getScheme().equals("https"))) {
-                LOG("Loading web URI: " + mSource.toString());
+                if(DEBUG)
+                    LOG("Loading web URI: " + mSource.toString());
                 mPlayer.setDataSource(mSource.toString());
             } else {
-                LOG("Loading local URI: " + mSource.toString());
+                if(DEBUG)
+                    LOG("Loading local URI: " + mSource.toString());
                 mPlayer.setDataSource(getContext(), mSource);
             }
             mPlayer.prepareAsync();
@@ -563,7 +567,8 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
             mHandler = null;
         }
 
-        LOG("Released player and Handler");
+        if(DEBUG)
+            LOG("Released player and Handler");
     }
 
     @Override
@@ -575,7 +580,8 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
-        LOG("Surface texture available: %dx%d", width, height);
+        if(DEBUG)
+            LOG("Surface texture available: %dx%d", width, height);
         mInitialTextureWidth = width;
         mInitialTextureHeight = height;
         mSurfaceAvailable = true;
@@ -589,13 +595,15 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int width, int height) {
-        LOG("Surface texture changed: %dx%d", width, height);
+        if(DEBUG)
+            LOG("Surface texture changed: %dx%d", width, height);
         adjustAspectRatio(width, height, mPlayer.getVideoWidth(), mPlayer.getVideoHeight());
     }
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-        LOG("Surface texture destroyed");
+        if(DEBUG)
+            LOG("Surface texture destroyed");
         mSurfaceAvailable = false;
         mSurface = null;
         return false;
@@ -609,7 +617,8 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        LOG("onPrepared()");
+        if(DEBUG)
+            LOG("onPrepared()");
         mProgressFrame.setVisibility(View.INVISIBLE);
         mIsPrepared = true;
         if (mCallback != null)
@@ -637,7 +646,8 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
 
     @Override
     public void onBufferingUpdate(MediaPlayer mediaPlayer, int percent) {
-        LOG("Buffering: %d%%", percent);
+        if(DEBUG)
+            LOG("Buffering: %d%%", percent);
         if (mCallback != null)
             mCallback.onBuffering(percent);
         if (mSeeker != null) {
@@ -648,7 +658,8 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        LOG("onCompletion()");
+        if(DEBUG)
+            LOG("onCompletion()");
         if (mCallback != null)
             mCallback.onCompletion(this);
         mBtnPlayPause.setImageDrawable(mPlayDrawable);
@@ -660,7 +671,8 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
 
     @Override
     public void onVideoSizeChanged(MediaPlayer mediaPlayer, int width, int height) {
-        LOG("Video size changed: %dx%d", width, height);
+        if(DEBUG)
+            LOG("Video size changed: %dx%d", width, height);
         adjustAspectRatio(mInitialTextureWidth, mInitialTextureHeight, width, height);
     }
 
@@ -834,7 +846,8 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        LOG("Detached from window");
+        if(DEBUG)
+            LOG("Detached from window");
         release();
 
         mSeeker = null;
