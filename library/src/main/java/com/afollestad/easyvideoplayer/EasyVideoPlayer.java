@@ -374,7 +374,7 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
                 mPlayer.setDataSource(getContext(), mSource);
             }
             mPlayer.prepareAsync();
-        } catch (IOException e) {
+        } catch (Exception e) {
             throwError(e);
         }
     }
