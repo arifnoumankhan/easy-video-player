@@ -952,7 +952,8 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
             if (mAutoFullscreen) {
                 int flags = !fullscreen ? 0 : View.SYSTEM_UI_FLAG_LOW_PROFILE;
 
-                ViewCompat.setFitsSystemWindows(mControlsFrame, !fullscreen);
+                if(mControlsFrame != null)
+                    ViewCompat.setFitsSystemWindows(mControlsFrame, !fullscreen);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     flags |= View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -965,7 +966,8 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
                     }
                 }
 
-                mClickFrame.setSystemUiVisibility(flags);
+                if(mClickFrame != null)
+                    mClickFrame.setSystemUiVisibility(flags);
             }
         }
     }
